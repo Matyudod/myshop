@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
-
+import '../shared/app_drawer.dart';
+import '../screens.dart';
 import 'package:flutter/material.dart';
 import 'products_grid.dart';
 
@@ -23,18 +24,20 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           buildShoppingCartIcon(),
         ],
       ),
+      drawer: const AppDrawer(),
       body: ProductsGrid(_showOnlyFavorites),
     );
   }
 
   Widget buildShoppingCartIcon() {
     return IconButton(
-        icon: const Icon(
-          Icons.shopping_cart,
-        ),
-        onPressed: () {
-          print('Go to cart screen');
-        });
+      icon: const Icon(
+        Icons.shopping_cart,
+      ),
+      onPressed: () {
+        Navigator.of(context).pushNamed(CartScreen.routeName);
+      },
+    );
   }
 
   Widget buildProductFilterMenu() {
