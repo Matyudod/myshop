@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myshop/ui/orders/order_manager.dart';
 import 'package:provider/provider.dart';
 import 'cart_manager.dart';
 import 'cart_item_card.dart';
@@ -13,13 +14,15 @@ class CartScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Your Cart'),
       ),
-      body: Column(children: [
-        buildCartSummary(cart, context),
-        const SizedBox(height: 10),
-        Expanded(
-          child: buildCartDetails(cart),
-        ),
-      ]),
+      body: Column(
+        children: <Widget>[
+          buildCartSummary(cart, context),
+          const SizedBox(height: 10),
+          Expanded(
+            child: buildCartDetails(cart),
+          )
+        ],
+      ),
     );
   }
 
@@ -43,7 +46,7 @@ class CartScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+          children: <Widget>[
             const Text(
               'Total',
               style: TextStyle(fontSize: 20),
@@ -59,14 +62,19 @@ class CartScreen extends StatelessWidget {
               backgroundColor: Theme.of(context).primaryColor,
             ),
             TextButton(
-              onPressed: () {
-                print('An order has been added ');
-              },
+              onPressed: cart.totalAmount <= 0
+                  ? null
+                  : () {
+                      context.read<OrdersManager>().addOrder(
+                            cart.products,
+                            cart.totalAmount,
+                          );
+                    },
               style: TextButton.styleFrom(
                 textStyle: TextStyle(color: Theme.of(context).primaryColor),
               ),
               child: const Text('ORDER NOW'),
-            ),
+            )
           ],
         ),
       ),

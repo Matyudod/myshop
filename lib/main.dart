@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'ui/products/products_manager.dart';
+// import 'ui/products/products_manager.dart';
 // import 'ui/products/product_detail_screen.dart';
 // import 'ui/products/product_overview_screen.dart';
 // import 'ui/products/user_products_screen.dart';
 // import 'ui/cart/cart_screen.dart';
 // import 'ui/orders/orders_screen.dart';
-import 'ui/screens.dart';
 import 'package:provider/provider.dart';
+import 'ui/screens.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,10 +24,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => CartManager(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => OrdersManager(),
+        ),
       ],
       child: MaterialApp(
         title: 'My Shop',
-        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Lato',
           colorScheme: ColorScheme.fromSwatch(
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
         ),
         home: const ProductsOverviewScreen(),
         routes: {
-          CartScreen.routeName: (ctx) => const CartScreen(),
+          CartScreen.routeName: (ctx) => const OrdersScreen(),
           OrdersScreen.routeName: (ctx) => const OrdersScreen(),
           UserProductsScreen.routeName: (ctx) => const UserProductsScreen(),
         },
@@ -48,7 +50,8 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
               builder: (ctx) {
                 return ProductDetailScreen(
-                    ctx.read<ProductsManager>().findById(productId));
+                  ctx.read<ProductsManager>().findById(productId),
+                );
               },
             );
           }
