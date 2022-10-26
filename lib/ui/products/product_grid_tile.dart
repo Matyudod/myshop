@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myshop/ui/cart/cart_manager.dart';
-import 'package:provider/provider.dart';
 import '../../models/product.dart';
-
 import 'product_detail_screen.dart';
+import 'package:provider/provider.dart';
+import '../cart/cart_manager.dart';
+import 'products_manager.dart';
 
 class ProductGridTile extends StatelessWidget {
   const ProductGridTile(
@@ -11,6 +11,7 @@ class ProductGridTile extends StatelessWidget {
     super.key,
   });
   final Product product;
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -24,9 +25,18 @@ class ProductGridTile extends StatelessWidget {
               arguments: product.id,
             );
           },
-          child: Image.network(
-            product.imageUrl,
-            fit: BoxFit.cover,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => ProductDetailScreen(product),
+                ),
+              );
+            },
+            child: Image.network(
+              product.imageUrl,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
@@ -37,19 +47,18 @@ class ProductGridTile extends StatelessWidget {
     return GridTileBar(
       backgroundColor: Colors.black87,
       leading: ValueListenableBuilder<bool>(
-        valueListenable: product.isFavoriteListenable,
-        builder: (ctx, isFavorite, child) {
-          return IconButton(
-            icon: Icon(
-              product.isFavorite ? Icons.favorite : Icons.favorite_border,
-            ),
-            color: Theme.of(context).colorScheme.secondary,
-            onPressed: () {
-              product.isFavorite = !isFavorite;
-            },
-          );
-        },
-      ),
+          valueListenable: product.isFavoriteListenable,
+          builder: (ctx, isFavorite, child) {
+            return IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+              ),
+              color: Theme.of(context).colorScheme.secondary,
+              onPressed: () {
+                ctx.read<ProductsManager>().tonggleFavoriteStatus(product);
+              },
+            );
+          }),
       title: Text(
         product.title,
         textAlign: TextAlign.center,
@@ -66,7 +75,7 @@ class ProductGridTile extends StatelessWidget {
             ..showSnackBar(
               SnackBar(
                 content: const Text(
-                  'Item add to cart!',
+                  'Item added to cart',
                 ),
                 duration: const Duration(seconds: 2),
                 action: SnackBarAction(

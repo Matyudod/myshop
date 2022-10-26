@@ -139,8 +139,8 @@ class _AuthCardState extends State<AuthCard> {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
         textStyle: TextStyle(
-          color: Theme.of(context).primaryTextTheme.headline6?.color,
           backgroundColor: Theme.of(context).primaryColor,
+          color: Theme.of(context).primaryTextTheme.headline6?.color,
         ),
       ),
       child: Text(_authMode == AuthMode.login ? 'LOGIN' : 'SIGN UP'),

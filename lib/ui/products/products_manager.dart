@@ -1,5 +1,7 @@
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import '../../models/auth_token.dart';
+// import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import '../../services/products_service.dart';
 
@@ -8,7 +10,6 @@ class ProductsManager with ChangeNotifier {
   final ProductsService _productsService;
   ProductsManager([AuthToken? authToken])
       : _productsService = ProductsService(authToken);
-
   set authToken(AuthToken? authToken) {
     _productsService.authToken = authToken;
   }
@@ -18,7 +19,7 @@ class ProductsManager with ChangeNotifier {
     notifyListeners();
   }
 
-  Future addProduct(Product product) async {
+  Future<void> addProduct(Product product) async {
     final newProduct = await _productsService.addProduct(product);
     if (newProduct != null) {
       _items.add(newProduct);
@@ -42,9 +43,9 @@ class ProductsManager with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  Future updateProduct(Product product) async {
+  Future<void> updateProduct(Product product) async {
     final index = _items.indexWhere((item) => item.id == product.id);
-    if (index > 0) {
+    if (index >= 0) {
       if (await _productsService.updateProduct(product)) {
         _items[index] = product;
         notifyListeners();
@@ -52,20 +53,22 @@ class ProductsManager with ChangeNotifier {
     }
   }
 
-  Future deleteProduct(String id) async {
+  Future<void> deleteProduct(String id) async {
     final index = _items.indexWhere((item) => item.id == id);
     Product? existingProduct = _items[index];
     _items.removeAt(index);
     notifyListeners();
-
     if (!await _productsService.deleteProduct(id)) {
       _items.insert(index, existingProduct);
       notifyListeners();
     }
   }
 
-  void tonggleFavoriteStatus(Product product) {
+  Future<void> tonggleFavoriteStatus(Product product) async {
     final savedStatus = product.isFavorite;
     product.isFavorite = !savedStatus;
+    if (!await _productsService.saveFavoriteStatus(product)) {
+      product.isFavorite = savedStatus;
+    }
   }
 }

@@ -1,3 +1,4 @@
+// import 'dart:html';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +7,7 @@ import '../../models/order_item.dart';
 class OrderItemCard extends StatefulWidget {
   final OrderItem order;
   const OrderItemCard(this.order, {super.key});
+
   @override
   State<OrderItemCard> createState() => _OrderItemCardState();
 }
@@ -17,9 +19,9 @@ class _OrderItemCardState extends State<OrderItemCard> {
     return Card(
       margin: const EdgeInsets.all(10),
       child: Column(
-        children: [
+        children: <Widget>[
           buildOrderSummary(),
-          if (_expanded) buildOrderDetails(),
+          if (_expanded) buildOrderDetails()
         ],
       ),
     );
@@ -43,7 +45,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
                     ),
                   ),
                   Text(
-                    '${prod.quantity}x \$${prod.price}',
+                    '${prod.quantity} x \$${prod.price}',
                     style: const TextStyle(
                       fontSize: 18,
                       color: Colors.grey,

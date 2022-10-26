@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:myshop/ui/screens.dart';
+import '../orders/orders_screen.dart';
+import '../products/user_products_screen.dart';
 import 'package:provider/provider.dart';
+import '../auth/auth_manager.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -15,15 +18,16 @@ class AppDrawer extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-              leading: const Icon(Icons.shop),
-              title: const Text('Shop'),
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed('/');
-              }),
+            leading: const Icon(Icons.shop),
+            title: const Text('Shop'),
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed('/');
+            },
+          ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.payment),
-            title: const Text('Orders'),
+            title: const Text('Order'),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(OrdersScreen.routeName);
@@ -35,7 +39,7 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Manage Products'),
             onTap: () {
               Navigator.of(context)
-                  .pushReplacementNamed(UserProductScreen.routeName);
+                  .pushReplacementNamed(UserProductsScreen.routeName);
             },
           ),
           const Divider(),
@@ -45,7 +49,7 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context)
                 ..pop()
-                ..pushReplacementNamed("/");
+                ..pushReplacementNamed('/');
               context.read<AuthManager>().logout();
             },
           ),

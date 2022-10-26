@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../models/product.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -27,12 +28,12 @@ class ProductDetailScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 10,),
             Text(
               '\$${product.price}',
               style: const TextStyle(
                 color: Colors.grey,
-                fontSize: 28,
+                fontSize: 20,
               ),
             ),
             const SizedBox(

@@ -7,10 +7,10 @@ class TopRightBadge extends StatelessWidget {
     required this.data,
     this.color,
   });
-
   final Widget child;
   final Object data;
   final Color? color;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -34,11 +34,11 @@ class TopRightBadge extends StatelessWidget {
               data.toString(),
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 10,
               ),
             ),
           ),
-        ),
+        )
       ],
     );
   }

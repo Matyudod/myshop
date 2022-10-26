@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/product.dart';
@@ -14,7 +16,7 @@ class ProductsService extends FirebaseService {
       final productsUrl =
           Uri.parse('$databaseUrl/products.json?auth=$token&$filters');
       final response = await http.get(productsUrl);
-      final productsMap = json.decode(response.body) as Map;
+      final productsMap = json.decode(response.body) as Map<String, dynamic>;
       if (response.statusCode != 200) {
         print(productsMap['error']);
         return products;
@@ -41,7 +43,7 @@ class ProductsService extends FirebaseService {
     }
   }
 
-  Future addProduct(Product product) async {
+  Future<Product?> addProduct(Product product) async {
     try {
       final url = Uri.parse('$databaseUrl/products.json?auth=$token');
       final response = await http.post(
@@ -53,7 +55,6 @@ class ProductsService extends FirebaseService {
             }),
         ),
       );
-
       if (response.statusCode != 200) {
         throw Exception(json.decode(response.body)['error']);
       }
@@ -66,7 +67,7 @@ class ProductsService extends FirebaseService {
     }
   }
 
-  Future updateProduct(Product product) async {
+  Future<bool> updateProduct(Product product) async {
     try {
       final url =
           Uri.parse('$databaseUrl/products/${product.id}.json?auth=$token');
@@ -74,7 +75,6 @@ class ProductsService extends FirebaseService {
         url,
         body: json.encode(product.toJson()),
       );
-
       if (response.statusCode != 200) {
         throw Exception(json.decode(response.body)['error']);
       }
@@ -85,11 +85,30 @@ class ProductsService extends FirebaseService {
     }
   }
 
-  Future deleteProduct(String id) async {
+  Future<bool> deleteProduct(String id) async {
     try {
       final url = Uri.parse('$databaseUrl/products/$id.json?auth=$token');
       final response = await http.delete(url);
+      if (response.statusCode != 200) {
+        throw Exception(json.decode(response.body)['error']);
+      }
+      return true;
+    } catch (error) {
+      print(error);
+      return false;
+    }
+  }
 
+  Future<bool> saveFavoriteStatus(Product product) async {
+    try {
+      final url = Uri.parse(
+          '$databaseUrl/userFavorites/$userId/${product.id}.json?auth=$token');
+      final response = await http.put(
+        url,
+        body: json.encode(
+          product.isFavorite,
+        ),
+      );
       if (response.statusCode != 200) {
         throw Exception(json.decode(response.body)['error']);
       }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../models/product.dart';
 import '../shared/dialog_utils.dart';
-
 import 'products_manager.dart';
 
 class EditProductScreen extends StatefulWidget {
@@ -78,7 +76,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
     setState(() {
       _isLoading = true;
     });
-
     try {
       final productsManager = context.read<ProductsManager>();
       if (_editedProduct.id != null) {
