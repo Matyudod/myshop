@@ -16,20 +16,42 @@ class ProductsOverviewScreen extends StatefulWidget {
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
-  var _showOnlyFavorites = false;
+  final _showOnlyFavorites = ValueNotifier(false);
+  late Future<void> _fetchProducts;
+  @override
+  void initState() {
+    super.initState();
+    _fetchProducts = context.read().fetchProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('MyShop'),
-        actions: <Widget>[
-          buildProductFilterMenu(),
-          buildShoppingCartIcon(),
-        ],
-      ),
-      drawer: const AppDrawer(),
-      body: ProductsGrid(_showOnlyFavorites),
-    );
+        appBar: AppBar(
+          title: const Text('MyShop'),
+          actions: <Widget>[
+            buildProductFilterMenu(),
+            buildShoppingCartIcon(),
+          ],
+        ),
+        drawer: const AppDrawer(),
+        body: FutureBuilder(
+          future: _fetchProducts,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return ValueListenableBuilder<bool>(
+                valueListenable: _showOnlyFavorites,
+                builder: (context, onlyFavorites, child) {
+                  return ProductsGrid(onlyFavorites);
+                },
+              );
+            }
+            ;
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ));
   }
 
   Widget buildShoppingCartIcon() {
@@ -53,12 +75,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   Widget buildProductFilterMenu() {
     return PopupMenuButton(
       onSelected: (FilterOptions selectedValue) {
-        setState(() => {
-              if (selectedValue == FilterOptions.favorites)
-                {_showOnlyFavorites = true}
-              else
-                {_showOnlyFavorites = false}
-            });
+        if (selectedValue == FilterOptions.favorites) {
+          _showOnlyFavorites.value = true;
+        } else {
+          _showOnlyFavorites.value = false;
+        }
       },
       icon: const Icon(
         Icons.more_vert,

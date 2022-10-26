@@ -10,22 +10,35 @@ import '../shared/app_drawer.dart';
 class UserProductScreen extends StatelessWidget {
   static const routeName = '/user-products';
   const UserProductScreen({super.key});
+  Future<void> _refreshProducts(BuildContext context) async {
+    await context.read<ProductsManager>().fetchProducts(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final productsManager = ProductsManager();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your Products'),
-        actions: <Widget>[
-          buildAddButton(context),
-        ],
-      ),
-      drawer: const AppDrawer(),
-      body: RefreshIndicator(
-        onRefresh: () async => print('refresh products'),
-        child: buildUserProductListView(productsManager),
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('Your Products'),
+          actions: <Widget>[
+            buildAddButton(context),
+          ],
+        ),
+        drawer: const AppDrawer(),
+        body: FutureBuilder(
+          future: _refreshProducts(context),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return RefreshIndicator(
+              child: buildUserProductListView(productsManager),
+              onRefresh: () => _refreshProducts(context),
+            );
+          },
+        ));
   }
 
   Widget buildUserProductListView(ProductsManager productsManager) {
