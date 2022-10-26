@@ -10,7 +10,7 @@ class ProductsGrid extends StatelessWidget {
   const ProductsGrid(this.showFavorites, {super.key});
   @override
   Widget build(BuildContext context) {
-    final productsManager = ProductsManager();
+    ProductsManager productsManager = ProductsManager();
     final products = context.select<ProductsManager, List<Product>>(
         (productsManager) => showFavorites
             ? productsManager.favoriteItems

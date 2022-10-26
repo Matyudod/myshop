@@ -1,9 +1,7 @@
-// ignore_for_file: avoid_print
 import '../shared/app_drawer.dart';
 import '../screens.dart';
 import 'package:flutter/material.dart';
 import 'products_grid.dart';
-import '../cart/cart_manager.dart';
 import 'top_right_badge.dart';
 import 'package:provider/provider.dart';
 
