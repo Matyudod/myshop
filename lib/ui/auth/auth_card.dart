@@ -139,7 +139,6 @@ class _AuthCardState extends State<AuthCard> {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
         textStyle: TextStyle(
-          backgroundColor: Theme.of(context).primaryColor,
           color: Theme.of(context).primaryTextTheme.headline6?.color,
         ),
       ),
